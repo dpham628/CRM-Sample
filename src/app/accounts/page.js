@@ -2,6 +2,7 @@
 
 import SearchBar from "@/components/Searchbar";
 import React, { useState, useEffect } from "react";
+import { accounts } from "@/data/accounts";
 
 // Function to make a call using Zoom Smart Embed/click-to-call
 export const makeCall = (phoneNumber, callerId) => {
@@ -23,32 +24,6 @@ export const makeCall = (phoneNumber, callerId) => {
 };
 
 const Accounts = () => {
-  const accounts = [
-    {
-      id: '1',
-      name: 'Rehema Armorer',
-      email: 'rehema@example.com',
-      phoneNumber: '+15551234567',
-      description: 'Senior Account Executive',
-      status: 'Active',
-    },
-    {
-      id: '2',
-      name: 'Jane Doe',
-      email: 'jane.doe@example.com',
-      phoneNumber: '+15559876543',
-      description: 'Technical Support Manager',
-      status: 'Inactive',
-    },
-    {
-      id: '3',
-      name: 'John Smith',
-      email: 'john.smith@example.com',
-      phoneNumber: '+15551112233',
-      description: 'Solutions Architect',
-      status: 'Active',
-    }
-  ];
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-8">
