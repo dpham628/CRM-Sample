@@ -37,7 +37,7 @@ This application is designed as a reference project for developers building CRM 
    ```bash
    npm install
    ```
-3. Copy `.env.example` to a `.env` file (see below for OAuth instructions)
+3. Copy `.env.sample` to a `.env` file (see below for OAuth instructions). Set `NEXTAUTH_URL` to the app's base URL (e.g. `http://localhost:3000` locally, or your ngrok URL) and `NEXTAUTH_SECRET` to a random string (e.g. `openssl rand -base64 32`). On `main`, the Zoom credentials can stay as placeholders; pages don't require sign-in.
 4. Start the development server:
    ```bash
    npm run dev
@@ -102,10 +102,11 @@ This application makes use of Smart Embed for soft phone use. Both Contact Cente
 ## 🗂️ Project Structure
 
 ```
-/pages
-  /api             → API routes for token handling and Zoom integration
-/components        → Reusable React components (e.g., VoiceAuth, ContactCard)
-/styles            → Tailwind styles and globals
+/src
+  /app             → App Router pages and globals.css (Tailwind)
+    /api           → API route handlers for NextAuth and Zoom integration
+  /components      → Reusable React components (e.g., Sidebar, SmartEmbed)
+  /context         → React context providers (auth, calls)
 .env               → Environment config for OAuth
 ```
 

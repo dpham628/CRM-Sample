@@ -13,9 +13,9 @@ const HomePage = () => {
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const res = await fetch('/api/call-logs');
+        const res = await fetch('/api/call-history');
+        if (!res.ok) return;
         const data = await res.json();
-        console.log('test', data)
         setCalls(data.interactions);
         } catch(err) {
         console.error('failed to fetch call logs', err);
