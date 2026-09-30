@@ -1,8 +1,11 @@
 "use client";
 
 import React from "react";
+import { usePostCall } from "@/context/post-call-context";
+import { findAccountByPhone } from "@/data/accounts";
 
 const EventModal = ({ log, index, onClose }) => {
+  const { openWorkflow } = usePostCall();
   if (!log) return null;
 
   const { eventType, data } = log;
@@ -10,6 +13,14 @@ const EventModal = ({ log, index, onClose }) => {
   const callLogId = data?.data?.callLogId || "N/A";
   const direction = data?.data?.direction || "N/A";
   const caller = data?.data?.caller?.name || "Unknown";
+  const contact =
+    findAccountByPhone(data?.data?.caller?.phoneNumber) ||
+    findAccountByPhone(data?.data?.callee?.phoneNumber);
+
+  const startWorkflow = () => {
+    openWorkflow({ callId: callLogId !== "N/A" ? callLogId : callId, accountId: contact?.id });
+    onClose(log.id);
+  };
 
   return (
     <div
@@ -32,6 +43,14 @@ const EventModal = ({ log, index, onClose }) => {
         <li><strong>Direction:</strong> {direction}</li>
         <li><strong>Caller:</strong> {caller}</li>
       </ul>
+      {eventType === "zp-call-log-completed-event" && (
+        <button
+          onClick={startWorkflow}
+          className="mt-3 w-full px-3 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+        >
+          Start post-call workflow
+        </button>
+      )}
     </div>
   );
 };

@@ -4,12 +4,16 @@ import React, { useState } from "react";
 import { format } from "date-fns";
 import { useCall } from "@/context/global-context";
 import CallDetailsModal from "@/components/CallDetailsModal"; // Import the existing component
+import { usePostCall } from "@/context/post-call-context";
+import { findAccountById } from "@/data/accounts";
 
 const CallLogs = () => {
   const { calls } = useCall();
+  const { openWorkflow } = usePostCall();
   const [logs] = useState([
     {
       id: 'call-001',
+      account_id: '2',
       direction: 'Inbound',
       connect_type: 'Direct',
       start_time: '2025-06-10T14:30:00Z',
@@ -19,6 +23,7 @@ const CallLogs = () => {
     },
     {
       id: 'call-002',
+      account_id: '1',
       direction: 'Outbound',
       connect_type: 'Transfer',
       start_time: '2025-06-11T09:15:00Z',
@@ -28,6 +33,7 @@ const CallLogs = () => {
     },
     {
       id: 'call-003',
+      account_id: '3',
       direction: 'Inbound',
       connect_type: 'IVR',
       start_time: '2025-06-12T16:00:00Z',
@@ -56,12 +62,14 @@ const CallLogs = () => {
           <thead className="bg-gray-100 text-gray-600 uppercase text-xs tracking-wider">
             <tr>
               <th className="px-4 py-3 border-b">Call ID</th>
+              <th className="px-4 py-3 border-b">Contact</th>
               <th className="px-4 py-3 border-b">Direction</th>
               <th className="px-4 py-3 border-b">Connect type</th>
               <th className="px-4 py-3 border-b">Start Time</th>
               <th className="px-4 py-3 border-b">End Time</th>
               <th className="px-4 py-3 border-b">Duration</th>
               <th className="px-4 py-3 border-b">Recording</th>
+              <th className="px-4 py-3 border-b">Post-call</th>
             </tr>
           </thead>
           <tbody className="text-gray-700">
@@ -75,12 +83,24 @@ const CallLogs = () => {
                     {log.id}
                   </button>
                 </td>
+                <td className="px-4 py-3 border-b">
+                  {findAccountById(log.account_id)?.name}
+                  <div className="text-xs text-gray-500">{findAccountById(log.account_id)?.company}</div>
+                </td>
                 <td className="px-4 py-3 border-b">{log.direction}</td>
                 <td className="px-4 py-3 border-b">{log.connect_type}</td>
                 <td className="px-4 py-3 border-b">{log.start_time ? format(new Date(log.start_time), "yyyy-MM-dd HH:mm:ss") : 'N/A'}</td>
                 <td className="px-4 py-3 border-b">{log.end_time ? format(new Date(log.end_time), "yyyy-MM-dd HH:mm:ss") : 'N/A'}</td>
                 <td className="px-4 py-3 border-b">{Math.floor(log.duration / 60)} min</td>
                 <td className="px-4 py-3 border-b">{log.recording_status}</td>
+                <td className="px-4 py-3 border-b">
+                  <button
+                    onClick={() => openWorkflow({ callId: log.id, accountId: log.account_id })}
+                    className="text-blue-600 hover:text-blue-800 hover:underline whitespace-nowrap"
+                  >
+                    Add action items
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
