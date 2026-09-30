@@ -6,7 +6,7 @@ const HomeInstructions = () => {
       <h1 className="text-2xl font-bold mb-4">📘 Welcome to the Zoom CRM Demo App</h1>
 
       <p className="mb-4">
-        This is a sample CRM built to demonstrate how Zoom's Phone and Contact Center platforms can be integrated using Smart Embed, Zoom APIs, and OAuth authentication.
+        This is a sample CRM built to demonstrate how Zoom&apos;s Phone and Contact Center platforms can be integrated using Smart Embed, Zoom APIs, and OAuth authentication.
       </p>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">🧰 Tech Stack</h2>
@@ -35,7 +35,7 @@ const HomeInstructions = () => {
 
       <h2 className="text-xl font-semibold mt-6 mb-2">📞 Smart Embed Setup</h2>
       <p className="mb-2"><strong>For Zoom Phone:</strong> Configure via the Zoom Phone Smart Embed app.</p>
-      <p className="mb-2"><strong>For Contact Center:</strong> Set up the integration inside Zoom's Contact Center Management panel.</p>
+      <p className="mb-2"><strong>For Contact Center:</strong> Set up the integration inside Zoom&apos;s Contact Center Management panel.</p>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">🔄 App Modes</h2>
       <ul className="list-disc list-inside mb-4">
@@ -45,7 +45,7 @@ const HomeInstructions = () => {
       </ul>
 
       <p className="mt-6 text-sm text-gray-500">
-        ⚠️ This app is for demo purposes only. Don't use real secrets in a public deployment.
+        ⚠️ This app is for demo purposes only. Don&apos;t use real secrets in a public deployment.
       </p>
     </div>
   );

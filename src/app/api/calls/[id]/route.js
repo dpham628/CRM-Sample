@@ -3,7 +3,7 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function GET(request, { params }) {
   // Await the params object to get the id
-  const callId = params?.id;
+  const { id: callId } = await params;
   try {     
     const session = await getServerSession(authOptions);
     if (!session || !session.accessToken) {
