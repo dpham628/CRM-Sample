@@ -3,6 +3,11 @@ import React, {useState, useEffect} from "react";
 
 const Calls = () => {
   const [loading, setLoading] = useState(true);
+  const [now, setNow] = useState(null);
+
+  useEffect(() => {
+    setNow(Date.now());
+  }, []);
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -16,8 +21,8 @@ const Calls = () => {
       id: 1,
       agent_name: "John Doe",
       queue_name: "Support",
-      start_time: new Date().toISOString(),
-      end_time: new Date(Date.now() + 600000).toISOString(), // +10 minutes
+      start_time: new Date(now).toISOString(),
+      end_time: new Date(now + 600000).toISOString(), // +10 minutes
       duration: 600,
       recording_url: "https://example.com/recording1.mp3"
     },
@@ -25,8 +30,8 @@ const Calls = () => {
       id: 2,
       agent_name: "Jane Smith",
       queue_name: "Sales",
-      start_time: new Date().toISOString(),
-      end_time: new Date(Date.now() + 300000).toISOString(), // +5 minutes
+      start_time: new Date(now).toISOString(),
+      end_time: new Date(now + 300000).toISOString(), // +5 minutes
       duration: 300,
       recording_url: ""
     }
@@ -51,8 +56,8 @@ const Calls = () => {
             <tr key={log.id} className="border-b hover:bg-gray-50">
               <td className="px-4 py-2">{log.agent_name}</td>
               <td className="px-4 py-2">{log.queue_name}</td>
-              <td className="px-4 py-2">{new Date(log.start_time).toLocaleString()}</td>
-              <td className="px-4 py-2">{new Date(log.end_time).toLocaleString()}</td>
+              <td className="px-4 py-2">{now ? new Date(log.start_time).toLocaleString() : ''}</td>
+              <td className="px-4 py-2">{now ? new Date(log.end_time).toLocaleString() : ''}</td>
               <td className="px-4 py-2">{Math.floor(log.duration / 60)} min</td>
               <td className="px-4 py-2"> 
                 {log.recording_url ? (
