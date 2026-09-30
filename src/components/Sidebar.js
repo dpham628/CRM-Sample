@@ -5,6 +5,7 @@ import {
   UserGroupIcon,
   PhoneIcon,
   InformationCircleIcon,
+  ClipboardDocumentCheckIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
@@ -12,6 +13,7 @@ const navItems = [
   { label: 'Dashboard', icon: HomeIcon, href: '/' },
   { label: 'Accounts', icon: UserGroupIcon, href: '/accounts' },
   { label: 'Call Logs', icon: PhoneIcon, href: '/call-logs' },
+  { label: 'Tasks', icon: ClipboardDocumentCheckIcon, href: '/tasks' },
   { label: 'Instructions', icon: InformationCircleIcon, href: '/instructions' },
 ];
 
