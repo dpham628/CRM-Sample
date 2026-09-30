@@ -5,7 +5,7 @@ import Sidebar from "../components/Sidebar";
 import SmartEmbed from "@/components/SmartEmbed";
 import EventLog from "@/components/EventLog";
 import { CallProvider} from "@/context/global-context";
-import { TaskProvider } from "@/context/task-context";
+import { PostCallProvider } from "@/context/post-call-context";
 
 export const metadata = {
   title: "Create Next App",
@@ -21,14 +21,14 @@ export default function RootLayout({ children }) {
           <Sidebar />
         </div>
         <div className="flex-1 min-w-0">
-          <TaskProvider>
+          <PostCallProvider>
             <EventLog />
             <AuthProvider>
               <CallProvider>
                 <main>{children}</main>
               </CallProvider>
             </AuthProvider>
-          </TaskProvider>
+          </PostCallProvider>
         </div>
         <div className="w-[420px] h-full overflow-hidden bg-white border-l border-gray-200 p-4">
         <SmartEmbed />

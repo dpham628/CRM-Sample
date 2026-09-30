@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { useTasks } from "@/context/task-context";
+import { usePostCall } from "@/context/post-call-context";
 import { findAccountByPhone } from "@/data/accounts";
 
 const EventModal = ({ log, index, onClose }) => {
-  const { openTaskForm } = useTasks();
+  const { openWorkflow } = usePostCall();
   if (!log) return null;
 
   const { eventType, data } = log;
@@ -17,8 +17,8 @@ const EventModal = ({ log, index, onClose }) => {
     findAccountByPhone(data?.data?.caller?.phoneNumber) ||
     findAccountByPhone(data?.data?.callee?.phoneNumber);
 
-  const createTask = () => {
-    openTaskForm({ callId: callLogId !== "N/A" ? callLogId : callId, accountId: contact?.id });
+  const startWorkflow = () => {
+    openWorkflow({ callId: callLogId !== "N/A" ? callLogId : callId, accountId: contact?.id });
     onClose(log.id);
   };
 
@@ -45,10 +45,10 @@ const EventModal = ({ log, index, onClose }) => {
       </ul>
       {eventType === "zp-call-log-completed-event" && (
         <button
-          onClick={createTask}
+          onClick={startWorkflow}
           className="mt-3 w-full px-3 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
         >
-          Create follow-up task
+          Start post-call workflow
         </button>
       )}
     </div>

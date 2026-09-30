@@ -25,16 +25,13 @@ export const accounts = [
     phoneNumber: '+15551112233',
     description: 'Solutions Architect',
     status: 'Active',
-  },
+  }
 ];
 
 export const findAccountById = (id) => accounts.find((account) => account.id === id);
 
-const lastTenDigits = (phoneNumber) => String(phoneNumber).replace(/\D/g, '').slice(-10);
-
 export const findAccountByPhone = (phoneNumber) => {
   if (!phoneNumber) return undefined;
-  const digits = lastTenDigits(phoneNumber);
-  if (!digits) return undefined;
-  return accounts.find((account) => lastTenDigits(account.phoneNumber) === digits);
+  const digits = String(phoneNumber).replace(/\D/g, '');
+  return accounts.find((account) => account.phoneNumber.replace(/\D/g, '').endsWith(digits.slice(-10)));
 };

@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import { format } from "date-fns";
 import { useCall } from "@/context/global-context";
 import CallDetailsModal from "@/components/CallDetailsModal"; // Import the existing component
-import { useTasks } from "@/context/task-context";
+import { usePostCall } from "@/context/post-call-context";
 import { findAccountById } from "@/data/accounts";
 
 const CallLogs = () => {
   const { calls } = useCall();
-  const { openTaskForm } = useTasks();
+  const { openWorkflow } = usePostCall();
   const [logs] = useState([
     {
       id: 'call-001',
@@ -69,7 +69,7 @@ const CallLogs = () => {
               <th className="px-4 py-3 border-b">End Time</th>
               <th className="px-4 py-3 border-b">Duration</th>
               <th className="px-4 py-3 border-b">Recording</th>
-              <th className="px-4 py-3 border-b">Follow-up</th>
+              <th className="px-4 py-3 border-b">Post-call</th>
             </tr>
           </thead>
           <tbody className="text-gray-700">
@@ -84,7 +84,7 @@ const CallLogs = () => {
                   </button>
                 </td>
                 <td className="px-4 py-3 border-b">
-                  <div>{findAccountById(log.account_id)?.name}</div>
+                  {findAccountById(log.account_id)?.name}
                   <div className="text-xs text-gray-500">{findAccountById(log.account_id)?.company}</div>
                 </td>
                 <td className="px-4 py-3 border-b">{log.direction}</td>
@@ -95,10 +95,10 @@ const CallLogs = () => {
                 <td className="px-4 py-3 border-b">{log.recording_status}</td>
                 <td className="px-4 py-3 border-b">
                   <button
-                    onClick={() => openTaskForm({ callId: log.id, accountId: log.account_id })}
+                    onClick={() => openWorkflow({ callId: log.id, accountId: log.account_id })}
                     className="text-blue-600 hover:text-blue-800 hover:underline whitespace-nowrap"
                   >
-                    Create task
+                    Add action items
                   </button>
                 </td>
               </tr>
