@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { addHours, format, isFriday, nextFriday, setHours, startOfHour } from 'date-fns';
 import { accounts, findAccountById } from '@/data/accounts';
+import { reps, findRepById } from '@/data/reps';
 
 export const ACTION_TYPES = {
   send_msa: { label: 'Send MSA', defaultDue: 'friday' },
@@ -29,9 +30,10 @@ const defaultTitle = (type, account) => {
 };
 
 let nextKey = 0;
-const newItem = (type) => ({
+const newItem = (type, repId = reps[0].id) => ({
   key: nextKey++,
   type,
+  repId,
   title: '',
   dueOption: ACTION_TYPES[type].defaultDue,
   customDue: '',
@@ -75,11 +77,18 @@ const PostCallWorkflowModal = ({ call, onClose, onSave }) => {
         setError(`Pick a due date for "${title}".`);
         return;
       }
+      const rep = findRepById(item.repId);
+      if (!rep) {
+        setError(`Assign a rep to "${title}".`);
+        return;
+      }
       resolved.push({
         id: `${now.getTime()}-${item.key}`,
         type: item.type,
         title,
         dueAt: due.toISOString(),
+        assignedRepId: rep.id,
+        assignedRepName: rep.name,
         callId: call.callId || null,
         accountId: account.id,
         contactName: account.name,
@@ -152,21 +161,21 @@ const PostCallWorkflowModal = ({ call, onClose, onSave }) => {
               <div className="space-x-2">
                 <button
                   type="button"
-                  onClick={() => setItems((prev) => [...prev, newItem('send_msa')])}
+                  onClick={() => setItems((prev) => [...prev, newItem('send_msa', prev.at(-1)?.repId)])}
                   className="text-blue-600 hover:underline"
                 >
                   + Send MSA
                 </button>
                 <button
                   type="button"
-                  onClick={() => setItems((prev) => [...prev, newItem('follow_up_email')])}
+                  onClick={() => setItems((prev) => [...prev, newItem('follow_up_email', prev.at(-1)?.repId)])}
                   className="text-blue-600 hover:underline"
                 >
                   + Follow-up email
                 </button>
                 <button
                   type="button"
-                  onClick={() => setItems((prev) => [...prev, newItem('custom')])}
+                  onClick={() => setItems((prev) => [...prev, newItem('custom', prev.at(-1)?.repId)])}
                   className="text-blue-600 hover:underline"
                 >
                   + Custom
@@ -208,7 +217,18 @@ const PostCallWorkflowModal = ({ call, onClose, onSave }) => {
                       </button>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-600">Due</span>
+                      <span className="text-gray-600">Assigned rep</span>
+                      <select
+                        aria-label="Assigned rep"
+                        value={item.repId}
+                        onChange={(e) => updateItem(item.key, { repId: e.target.value })}
+                        className="border border-gray-300 rounded px-2 py-1"
+                      >
+                        {reps.map((rep) => (
+                          <option key={rep.id} value={rep.id}>{rep.name}</option>
+                        ))}
+                      </select>
+                      <span className="text-gray-600 ml-2">Due</span>
                       <select
                         aria-label="Due"
                         value={item.dueOption}

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { format, formatDistanceToNow, isPast } from "date-fns";
 import { usePostCall } from "@/context/post-call-context";
 import { ACTION_TYPES } from "@/components/PostCallWorkflowModal";
+import { reps } from "@/data/reps";
 
 const FILTERS = ["Open", "Completed", "All"];
 
@@ -19,11 +20,13 @@ const mailtoFor = (item) => {
 const ActionItems = () => {
   const { actionItems, loaded, toggleComplete, removeActionItem, openWorkflow } = usePostCall();
   const [filter, setFilter] = useState("Open");
+  const [repFilter, setRepFilter] = useState("all");
 
   const visible = actionItems
     .filter((item) =>
       filter === "All" ? true : filter === "Open" ? !item.completedAt : !!item.completedAt
     )
+    .filter((item) => repFilter === "all" || (item.assignedRepId || "unassigned") === repFilter)
     .sort((a, b) => new Date(a.dueAt) - new Date(b.dueAt));
 
   return (
@@ -50,6 +53,18 @@ const ActionItems = () => {
             {f}
           </button>
         ))}
+        <select
+          aria-label="Filter by rep"
+          value={repFilter}
+          onChange={(e) => setRepFilter(e.target.value)}
+          className="ml-auto border border-gray-300 rounded px-2 py-1"
+        >
+          <option value="all">All reps</option>
+          {reps.map((rep) => (
+            <option key={rep.id} value={rep.id}>{rep.name}</option>
+          ))}
+          <option value="unassigned">Unassigned</option>
+        </select>
       </div>
 
       <div className="overflow-x-auto rounded-lg shadow">
@@ -59,6 +74,7 @@ const ActionItems = () => {
               <th className="px-4 py-3 border-b">Done</th>
               <th className="px-4 py-3 border-b">Action</th>
               <th className="px-4 py-3 border-b">Contact / Account</th>
+              <th className="px-4 py-3 border-b">Assigned rep</th>
               <th className="px-4 py-3 border-b">Call</th>
               <th className="px-4 py-3 border-b">Due</th>
               <th className="px-4 py-3 border-b"></th>
@@ -67,7 +83,7 @@ const ActionItems = () => {
           <tbody className="text-gray-700">
             {loaded && visible.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-6 text-center text-gray-500">
+                <td colSpan={7} className="px-4 py-6 text-center text-gray-500">
                   No {filter === "All" ? "" : filter.toLowerCase()} action items. Start a post-call workflow from Call Logs.
                 </td>
               </tr>
@@ -98,6 +114,7 @@ const ActionItems = () => {
                     <div>{item.contactName}</div>
                     <div className="text-xs text-gray-500">{item.company}</div>
                   </td>
+                  <td className="px-4 py-3 border-b">{item.assignedRepName || "Unassigned"}</td>
                   <td className="px-4 py-3 border-b">{item.callId || "—"}</td>
                   <td className={`px-4 py-3 border-b ${overdue ? "text-red-600" : ""}`}>
                     <div>{format(due, "EEE, MMM d, h:mm a")}</div>
