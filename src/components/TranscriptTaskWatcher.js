@@ -4,7 +4,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { format } from 'date-fns';
 import { useTasks } from '@/context/task-context';
 import { findAccountByPhone } from '@/data/accounts';
+import { CURRENT_REP_ID, currentRep, findTeamMember } from '@/data/team';
 import { extractTasksFromTranscript } from '@/lib/extract-tasks';
+import { buildHandoff, sendHandoff } from '@/lib/handoffs';
 import { resolveDueDate } from '@/lib/due-dates';
 
 const COMPLETED_EVENT = 'zp-call-log-completed-event';
@@ -44,20 +46,40 @@ const TranscriptTaskWatcher = () => {
         findAccountByPhone(data.caller?.phoneNumber) ||
         findAccountByPhone(data.callee?.phoneNumber);
       const now = new Date();
-      const items = extractTasksFromTranscript(transcript).map((item, i) => ({
-        id: `task-${now.getTime()}-${i}`,
-        callId,
-        contactId: contact?.id || null,
-        contactName: contact?.name || data.caller?.name || 'Unknown contact',
-        contactEmail: contact?.email || '',
-        account: contact?.company || '',
-        nextStep: item.nextStep,
-        dueAt: (resolveDueDate(item.dueOption) || now).toISOString(),
-        createdAt: now.toISOString(),
-        completedAt: null,
-        source: 'transcript',
-        snippet: item.snippet,
-      }));
+      const items = extractTasksFromTranscript(transcript).map((item, i) => {
+        const owner = findTeamMember(item.ownerId) || currentRep;
+        const task = {
+          id: `task-${now.getTime()}-${i}`,
+          callId,
+          contactId: contact?.id || null,
+          contactName: contact?.name || data.caller?.name || 'Unknown contact',
+          contactEmail: contact?.email || '',
+          account: contact?.company || '',
+          nextStep: item.nextStep,
+          dueAt: (resolveDueDate(item.dueOption) || now).toISOString(),
+          createdAt: now.toISOString(),
+          completedAt: null,
+          source: 'transcript',
+          snippet: item.snippet,
+          ownerId: owner.id,
+          ownerName: owner.name,
+          ownerRole: owner.role,
+          type: item.type || 'task',
+          priority: item.priority || 'normal',
+        };
+        // Handoffs/escalations go to the owner with a summary + client context.
+        if (owner.id !== CURRENT_REP_ID) {
+          const handoff = buildHandoff({
+            task,
+            owner,
+            contact,
+            call: { callId, direction: data.direction, time: now },
+          });
+          const notification = sendHandoff(handoff);
+          task.handoff = { ...handoff, sentAt: notification.sentAt };
+        }
+        return task;
+      });
       if (!items.length) return;
 
       addTasks(items);
@@ -102,6 +124,12 @@ const TranscriptTaskWatcher = () => {
               {task.contactName}
               {task.account ? ` · ${task.account}` : ''} · due {format(new Date(task.dueAt), 'EEE, MMM d, h:mm a')}
             </div>
+            {task.ownerId && task.ownerId !== CURRENT_REP_ID && (
+              <div className={`text-xs mt-0.5 ${task.type === 'escalation' ? 'text-red-600' : 'text-amber-700'}`}>
+                {task.type === 'escalation' ? 'Escalated to' : 'Assigned to'} {task.ownerName} ({task.ownerRole})
+                {task.handoff?.sentAt ? ' — notified' : ''}
+              </div>
+            )}
             {task.snippet && (
               <div className="text-xs text-gray-400 italic mt-0.5">“{task.snippet}”</div>
             )}
