@@ -75,6 +75,21 @@ body {
   overflow-wrap: anywhere;
 }
 
+.call-details-content .flex {
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.call-details-content .flex > span:first-child {
+  flex-shrink: 0;
+}
+
+.call-details-content .flex > span:last-child {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+}
+
 @media (max-width: 1023px) {
   .sidebar {
     width: 200px;

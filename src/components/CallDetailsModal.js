@@ -63,7 +63,7 @@ const CallDetailsModal = ({ callId, onClose }) => {
         </div>
 
         {/* Body */}
-        <div className="dialog-content px-6 py-4 overflow-y-auto flex-grow">
+        <div className="dialog-content call-details-content px-6 py-4 overflow-y-auto flex-grow">
           {loading ? (
             <div className="flex justify-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
