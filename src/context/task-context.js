@@ -46,7 +46,7 @@ export function TaskProvider({ children }) {
   const closeTaskForm = useCallback(() => setDraft(null), []);
 
   return (
-    <TaskContext.Provider value={{ tasks, loaded, toggleTask, removeTask, openTaskForm }}>
+    <TaskContext.Provider value={{ tasks, loaded, addTask, toggleTask, removeTask, openTaskForm }}>
       {children}
       {draft && (
         <PostCallTaskModal

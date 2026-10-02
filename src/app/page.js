@@ -2,6 +2,7 @@
 
 import Earnings from "@/components/Earnings";
 import Calls from "@/components/TodaysLogs";
+import MeetingsPanel from "@/components/MeetingsPanel";
 import SearchBar from "@/components/Searchbar";
 import { useEffect } from "react";
 import { useCall } from "@/context/global-context";
@@ -30,6 +31,7 @@ const HomePage = () => {
           <SearchBar />
         </div>
         <main className="flex flex-col space-y-8 ml-0 w-[800px]">
+          <MeetingsPanel />
           <Earnings />
           <Calls />  
         </main>
