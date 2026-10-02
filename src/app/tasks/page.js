@@ -15,12 +15,12 @@ const Tasks = () => {
     .sort((a, b) => new Date(a.dueAt) - new Date(b.dueAt));
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8">
+    <div className="max-w-4xl mx-auto px-4 py-6 md:px-6 md:py-8">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold">Follow-up Tasks</h2>
         <button
           onClick={() => openTaskForm()}
-          className="px-3 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          className="min-h-11 md:min-h-0 px-3 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
         >
           New task
         </button>
@@ -31,7 +31,7 @@ const Tasks = () => {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-3 py-1 rounded-full border ${
+            className={`min-h-11 md:min-h-0 px-3 py-1 rounded-full border ${
               filter === f ? "bg-blue-50 border-blue-400 text-blue-700" : "border-gray-300 text-gray-600"
             }`}
           >
@@ -69,13 +69,14 @@ const Tasks = () => {
                   <td className="px-4 py-3 border-b">
                     <input
                       type="checkbox"
+                      className="h-6 w-6 md:h-auto md:w-auto"
                       aria-label={`Mark "${task.nextStep}" done`}
                       checked={!!task.completedAt}
                       onChange={() => toggleTask(task.id)}
                     />
                   </td>
                   <td className="px-4 py-3 border-b">
-                    <div>{task.contactName}</div>
+                    <div className="whitespace-nowrap md:whitespace-normal">{task.contactName}</div>
                     <div className="text-xs text-gray-500">{task.contactEmail}</div>
                   </td>
                   <td className="px-4 py-3 border-b">{task.account}</td>
@@ -83,7 +84,7 @@ const Tasks = () => {
                     {task.nextStep}
                   </td>
                   <td className={`px-4 py-3 border-b ${overdue ? "text-red-600" : ""}`}>
-                    <div>{format(due, "EEE, MMM d, h:mm a")}</div>
+                    <div className="whitespace-nowrap md:whitespace-normal">{format(due, "EEE, MMM d, h:mm a")}</div>
                     <div className="text-xs">
                       {task.completedAt
                         ? "Completed"
@@ -94,7 +95,7 @@ const Tasks = () => {
                   </td>
                   <td className="px-4 py-3 border-b">{task.callId || "—"}</td>
                   <td className="px-4 py-3 border-b">
-                    <button onClick={() => removeTask(task.id)} className="text-red-600 hover:underline">
+                    <button onClick={() => removeTask(task.id)} className="min-h-11 md:min-h-0 text-red-600 hover:underline">
                       Delete
                     </button>
                   </td>

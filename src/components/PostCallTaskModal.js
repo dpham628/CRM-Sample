@@ -59,7 +59,7 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
       <div
         role="dialog"
         aria-labelledby="post-call-task-title"
-        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 flex flex-col"
+        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 max-h-[calc(100dvh-2rem)] flex flex-col"
       >
         <div className="flex justify-between items-center px-6 py-4 border-b">
           <div>
@@ -68,14 +68,14 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
             </h3>
             {call.callId && <p className="text-xs text-gray-500">After call {call.callId}</p>}
           </div>
-          <button onClick={onClose} aria-label="Close" className="text-gray-500 hover:text-gray-700">
+          <button onClick={onClose} aria-label="Close" className="p-3 -m-3 text-gray-500 hover:text-gray-700">
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
-        <div className="px-6 py-4 space-y-4 text-sm">
+        <div className="px-6 py-4 space-y-4 text-base md:text-sm overflow-y-auto">
           <label className="block">
             <span className="font-medium text-gray-700">Contact</span>
             <select
@@ -106,13 +106,13 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
               className="mt-1 w-full border border-gray-300 rounded px-2 py-2"
             />
           </label>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {SUGGESTED_STEPS.map((step) => (
               <button
                 key={step.label}
                 type="button"
                 onClick={() => applySuggestion(step)}
-                className="px-2 py-1 rounded-full border border-blue-300 text-blue-700 hover:bg-blue-50"
+                className="min-h-11 md:min-h-0 px-2 py-1 rounded-full border border-blue-300 text-blue-700 hover:bg-blue-50"
               >
                 {step.label} · {DUE_OPTIONS[step.due].toLowerCase()}
               </button>
@@ -121,7 +121,7 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
 
           <div>
             <span className="font-medium text-gray-700">Due</span>
-            <div className="mt-1 flex items-center gap-2">
+            <div className="mt-1 flex flex-wrap items-center gap-2">
               <select
                 aria-label="Due"
                 value={dueOption}
@@ -149,10 +149,10 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
         </div>
 
         <div className="border-t px-6 py-4 flex justify-end gap-2">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition">
+          <button onClick={onClose} className="min-h-11 md:min-h-0 px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition">
             Cancel
           </button>
-          <button onClick={handleSave} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+          <button onClick={handleSave} className="min-h-11 md:min-h-0 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
             Save task
           </button>
         </div>

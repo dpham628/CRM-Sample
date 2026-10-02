@@ -8,7 +8,7 @@ export default function SmartEmbed() {
           src="https://applications.zoom.us/integration/phone/embeddablephone/home"
           allow="clipboard-read; clipboard-write https://applications.zoom.us"
           id="zoom-embeddable-phone-iframe"
-          className="w-full h-[80vh] border-none"
+          className="w-full h-[calc(100dvh-8rem)] md:h-[80vh] border-none"
         ></iframe>
       </div>
     </div>

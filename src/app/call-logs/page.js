@@ -54,7 +54,7 @@ const CallLogs = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8">
+    <div className="max-w-4xl mx-auto px-4 py-6 md:px-6 md:py-8">
       <h2 className="text-lg font-semibold mb-4">Call Logs</h2>
 
       <div className="overflow-x-auto rounded-lg shadow">
@@ -78,25 +78,25 @@ const CallLogs = () => {
                 <td className="px-4 py-3 border-b">
                   <button 
                     onClick={() => handleCallClick(log.id)}
-                    className="text-blue-600 hover:text-blue-800 hover:underline focus:outline-none"
+                    className="min-h-11 md:min-h-0 whitespace-nowrap md:whitespace-normal text-blue-600 hover:text-blue-800 hover:underline focus:outline-none"
                   >
                     {log.id}
                   </button>
                 </td>
                 <td className="px-4 py-3 border-b">
-                  <div>{findAccountById(log.account_id)?.name}</div>
+                  <div className="whitespace-nowrap md:whitespace-normal">{findAccountById(log.account_id)?.name}</div>
                   <div className="text-xs text-gray-500">{findAccountById(log.account_id)?.company}</div>
                 </td>
                 <td className="px-4 py-3 border-b">{log.direction}</td>
                 <td className="px-4 py-3 border-b">{log.connect_type}</td>
-                <td className="px-4 py-3 border-b">{log.start_time ? format(new Date(log.start_time), "yyyy-MM-dd HH:mm:ss") : 'N/A'}</td>
-                <td className="px-4 py-3 border-b">{log.end_time ? format(new Date(log.end_time), "yyyy-MM-dd HH:mm:ss") : 'N/A'}</td>
+                <td className="px-4 py-3 border-b whitespace-nowrap md:whitespace-normal">{log.start_time ? format(new Date(log.start_time), "yyyy-MM-dd HH:mm:ss") : 'N/A'}</td>
+                <td className="px-4 py-3 border-b whitespace-nowrap md:whitespace-normal">{log.end_time ? format(new Date(log.end_time), "yyyy-MM-dd HH:mm:ss") : 'N/A'}</td>
                 <td className="px-4 py-3 border-b">{Math.floor(log.duration / 60)} min</td>
                 <td className="px-4 py-3 border-b">{log.recording_status}</td>
                 <td className="px-4 py-3 border-b">
                   <button
                     onClick={() => openTaskForm({ callId: log.id, accountId: log.account_id })}
-                    className="text-blue-600 hover:text-blue-800 hover:underline whitespace-nowrap"
+                    className="min-h-11 md:min-h-0 text-blue-600 hover:text-blue-800 hover:underline whitespace-nowrap"
                   >
                     Create task
                   </button>
