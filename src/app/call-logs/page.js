@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { format } from "date-fns";
 import { useCall } from "@/context/global-context";
 import CallDetailsModal from "@/components/CallDetailsModal"; // Import the existing component
+import InsightsCard from "@/components/InsightsCard";
 import { useTasks } from "@/context/task-context";
 import { findAccountById } from "@/data/accounts";
 
@@ -43,6 +44,11 @@ const CallLogs = () => {
     }
   ]);
   const [selectedCallId, setSelectedCallId] = useState(null); // Add state for selected call ID
+  const [insightsAccountId, setInsightsAccountId] = useState(null);
+
+  const toggleInsights = (accountId) => {
+    setInsightsAccountId((current) => (current === accountId ? null : accountId));
+  };
 
   // Add handlers for opening and closing the modal
   const handleCallClick = (callId) => {
@@ -70,6 +76,7 @@ const CallLogs = () => {
               <th className="px-4 py-3 border-b">Duration</th>
               <th className="px-4 py-3 border-b">Recording</th>
               <th className="px-4 py-3 border-b">Follow-up</th>
+              <th className="px-4 py-3 border-b">Insights</th>
             </tr>
           </thead>
           <tbody className="text-gray-700">
@@ -101,11 +108,23 @@ const CallLogs = () => {
                     Create task
                   </button>
                 </td>
+                <td className="px-4 py-3 border-b">
+                  <button
+                    onClick={() => toggleInsights(log.account_id)}
+                    className="text-amber-700 hover:text-amber-900 hover:underline whitespace-nowrap"
+                  >
+                    {insightsAccountId === log.account_id ? 'Hide' : 'View'}
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {insightsAccountId && (
+        <InsightsCard accountId={insightsAccountId} className="mt-4 max-w-md" />
+      )}
 
       {/* Render the modal when a call ID is selected */}
       {selectedCallId && (

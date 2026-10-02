@@ -3,6 +3,7 @@
 import React from "react";
 import { useTasks } from "@/context/task-context";
 import { findAccountByPhone } from "@/data/accounts";
+import InsightsCard from "./InsightsCard";
 
 const EventModal = ({ log, index, onClose }) => {
   const { openTaskForm } = useTasks();
@@ -43,6 +44,9 @@ const EventModal = ({ log, index, onClose }) => {
         <li><strong>Direction:</strong> {direction}</li>
         <li><strong>Caller:</strong> {caller}</li>
       </ul>
+      {eventType === "zp-call-log-completed-event" && contact && (
+        <InsightsCard accountId={contact.id} className="mt-3" />
+      )}
       {eventType === "zp-call-log-completed-event" && (
         <button
           onClick={createTask}
