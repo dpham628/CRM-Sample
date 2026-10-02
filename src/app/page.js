@@ -1,6 +1,7 @@
 "use client"
 
 import Earnings from "@/components/Earnings";
+import ActionItems from "@/components/ActionItems";
 import Calls from "@/components/TodaysLogs";
 import SearchBar from "@/components/Searchbar";
 import { useEffect } from "react";
@@ -30,6 +31,7 @@ const HomePage = () => {
           <SearchBar />
         </div>
         <main className="flex flex-col space-y-8 ml-0 w-[800px]">
+          <ActionItems />
           <Earnings />
           <Calls />  
         </main>
