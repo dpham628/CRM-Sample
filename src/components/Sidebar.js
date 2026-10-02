@@ -21,7 +21,7 @@ const navItems = [
 const Sidebar = () => {
   const pathname = usePathname();
   return (
-    <aside className="sidebar h-dvh w-64 bg-white shadow-lg flex flex-col">
+    <aside className="sidebar h-dvh w-full bg-white shadow-lg flex flex-col">
       <div className="sidebar-brand pt-6 pl-6 text-xl font-bold text-blue-600">My CRM</div>
 
       <nav aria-label="Main navigation" className="flex-1 pl-6 pt-4 pr-4 space-y-2">
