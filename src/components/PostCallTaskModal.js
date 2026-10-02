@@ -11,10 +11,13 @@ const SUGGESTED_STEPS = [
 ];
 
 const PostCallTaskModal = ({ call, onClose, onSave }) => {
-  const [accountId, setAccountId] = useState(call.accountId || '');
-  const [nextStep, setNextStep] = useState('');
-  const [dueOption, setDueOption] = useState('24h');
-  const [customDate, setCustomDate] = useState('');
+  const editing = call.task || null;
+  const [accountId, setAccountId] = useState(call.accountId || editing?.contactId || '');
+  const [nextStep, setNextStep] = useState(editing?.nextStep || '');
+  const [dueOption, setDueOption] = useState(editing ? 'custom' : '24h');
+  const [customDate, setCustomDate] = useState(
+    editing ? format(new Date(editing.dueAt), 'yyyy-MM-dd') : ''
+  );
   const [error, setError] = useState(null);
 
   const account = findAccountById(accountId);
@@ -40,17 +43,20 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
       return;
     }
     const now = new Date();
-    onSave({
+    const base = editing || {
       id: `task-${now.getTime()}`,
       callId: call.callId || null,
+      createdAt: now.toISOString(),
+      completedAt: null,
+    };
+    onSave({
+      ...base,
       contactId: account.id,
       contactName: account.name,
       contactEmail: account.email,
       account: account.company,
       nextStep: nextStep.trim(),
       dueAt: dueAt.toISOString(),
-      createdAt: now.toISOString(),
-      completedAt: null,
     });
   };
 
@@ -64,7 +70,7 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
         <div className="flex justify-between items-center px-6 py-4 border-b">
           <div>
             <h3 id="post-call-task-title" className="text-lg font-semibold text-gray-800">
-              Create follow-up task
+              {editing ? 'Edit follow-up task' : 'Create follow-up task'}
             </h3>
             {call.callId && <p className="text-xs text-gray-500">After call {call.callId}</p>}
           </div>

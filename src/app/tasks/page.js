@@ -81,6 +81,16 @@ const Tasks = () => {
                   <td className="px-4 py-3 border-b">{task.account}</td>
                   <td className={`px-4 py-3 border-b ${task.completedAt ? "line-through text-gray-400" : "font-medium"}`}>
                     {task.nextStep}
+                    {task.source === "transcript" && (
+                      <div className="mt-1">
+                        <span className="text-xs bg-blue-50 text-blue-700 border border-blue-200 rounded-full px-2 py-0.5">
+                          From transcript
+                        </span>
+                      </div>
+                    )}
+                    {task.snippet && (
+                      <div className="text-xs text-gray-500 font-normal italic mt-1">“{task.snippet}”</div>
+                    )}
                   </td>
                   <td className={`px-4 py-3 border-b ${overdue ? "text-red-600" : ""}`}>
                     <div>{format(due, "EEE, MMM d, h:mm a")}</div>
