@@ -68,7 +68,8 @@ export const buildHandoff = ({ task, owner, contact, call = {} }) => {
 // Simulated delivery — replace with a real email/Slack call later.
 export const sendHandoff = (handoff) => {
   const notification = {
-    id: `notif-${Date.now()}`,
+    // Include the task id so two handoffs sent in the same millisecond stay unique.
+    id: `notif-${Date.now()}-${handoff.taskId}`,
     channel: 'email',
     sentAt: new Date().toISOString(),
     ...handoff,
