@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { accounts, findAccountById } from '@/data/accounts';
+import { CURRENT_REP_ID, currentRep, findTeamMember, team } from '@/data/team';
+import { buildHandoff, sendHandoff } from '@/lib/handoffs';
 import { DUE_OPTIONS, resolveDueDate } from '@/lib/due-dates';
 
 const SUGGESTED_STEPS = [
@@ -11,10 +13,14 @@ const SUGGESTED_STEPS = [
 ];
 
 const PostCallTaskModal = ({ call, onClose, onSave }) => {
-  const [accountId, setAccountId] = useState(call.accountId || '');
-  const [nextStep, setNextStep] = useState('');
-  const [dueOption, setDueOption] = useState('24h');
-  const [customDate, setCustomDate] = useState('');
+  const editing = call.task || null;
+  const [accountId, setAccountId] = useState(call.accountId || editing?.contactId || '');
+  const [nextStep, setNextStep] = useState(editing?.nextStep || '');
+  const [ownerId, setOwnerId] = useState(editing?.ownerId || CURRENT_REP_ID);
+  const [dueOption, setDueOption] = useState(editing ? 'custom' : '24h');
+  const [customDate, setCustomDate] = useState(
+    editing ? format(new Date(editing.dueAt), 'yyyy-MM-dd') : ''
+  );
   const [error, setError] = useState(null);
 
   const account = findAccountById(accountId);
@@ -40,18 +46,40 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
       return;
     }
     const now = new Date();
-    onSave({
+    const base = editing || {
       id: `task-${now.getTime()}`,
       callId: call.callId || null,
+      createdAt: now.toISOString(),
+      completedAt: null,
+    };
+    const owner = findTeamMember(ownerId) || currentRep;
+    const task = {
+      ...base,
       contactId: account.id,
       contactName: account.name,
       contactEmail: account.email,
       account: account.company,
       nextStep: nextStep.trim(),
       dueAt: dueAt.toISOString(),
-      createdAt: now.toISOString(),
-      completedAt: null,
-    });
+      ownerId: owner.id,
+      ownerName: owner.name,
+      ownerRole: owner.role,
+      type: editing?.type === 'escalation' ? 'escalation' : owner.id === CURRENT_REP_ID ? 'task' : 'handoff',
+    };
+    if (owner.id !== CURRENT_REP_ID) {
+      const handoff = buildHandoff({
+        task,
+        owner,
+        contact: account,
+        call: { callId: call.callId, time: editing?.createdAt || now },
+      });
+      // Re-notify only when the owner changes; re-saving keeps the old receipt.
+      task.handoff =
+        editing?.handoff?.ownerId === owner.id
+          ? { ...handoff, sentAt: editing.handoff.sentAt }
+          : { ...handoff, sentAt: sendHandoff(handoff).sentAt };
+    }
+    onSave(task);
   };
 
   return (
@@ -64,7 +92,7 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
         <div className="flex justify-between items-center px-6 py-4 border-b">
           <div>
             <h3 id="post-call-task-title" className="text-lg font-semibold text-gray-800">
-              Create follow-up task
+              {editing ? 'Edit follow-up task' : 'Create follow-up task'}
             </h3>
             {call.callId && <p className="text-xs text-gray-500">After call {call.callId}</p>}
           </div>
@@ -96,6 +124,21 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
               {account ? account.company : '—'}
             </p>
           </div>
+
+          <label className="block">
+            <span className="font-medium text-gray-700">Assigned to</span>
+            <select
+              value={ownerId}
+              onChange={(e) => setOwnerId(e.target.value)}
+              className="mt-1 w-full border border-gray-300 rounded px-2 py-2"
+            >
+              {team.map((member) => (
+                <option key={member.id} value={member.id}>
+                  {member.name} — {member.role} ({member.department})
+                </option>
+              ))}
+            </select>
+          </label>
 
           <label className="block">
             <span className="font-medium text-gray-700">Next step</span>

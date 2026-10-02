@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import PostCallTaskModal from '@/components/PostCallTaskModal';
+import TranscriptTaskWatcher from '@/components/TranscriptTaskWatcher';
 
 const STORAGE_KEY = 'crm.tasks';
 
@@ -26,7 +27,16 @@ export function TaskProvider({ children }) {
     if (loaded) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
   }, [tasks, loaded]);
 
-  const addTask = useCallback((task) => setTasks((prev) => [task, ...prev]), []);
+  const addTasks = useCallback((newTasks) => setTasks((prev) => [...newTasks, ...prev]), []);
+
+  // Upsert: replaces a task when the id already exists (edit flow), otherwise prepends.
+  const saveTask = useCallback((task) => {
+    setTasks((prev) =>
+      prev.some((t) => t.id === task.id)
+        ? prev.map((t) => (t.id === task.id ? task : t))
+        : [task, ...prev]
+    );
+  }, []);
 
   const toggleTask = useCallback((id) => {
     setTasks((prev) =>
@@ -46,14 +56,15 @@ export function TaskProvider({ children }) {
   const closeTaskForm = useCallback(() => setDraft(null), []);
 
   return (
-    <TaskContext.Provider value={{ tasks, loaded, toggleTask, removeTask, openTaskForm }}>
+    <TaskContext.Provider value={{ tasks, loaded, addTasks, toggleTask, removeTask, openTaskForm }}>
       {children}
+      <TranscriptTaskWatcher />
       {draft && (
         <PostCallTaskModal
           call={draft}
           onClose={closeTaskForm}
           onSave={(task) => {
-            addTask(task);
+            saveTask(task);
             closeTaskForm();
           }}
         />
