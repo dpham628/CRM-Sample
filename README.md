@@ -89,6 +89,17 @@ This application makes use of Smart Embed for soft phone use. Both Contact Cente
  
 ---
 
+## 💡 CRM Insights via MCP (optional)
+
+The **Insights** card shows short, glanceable facts about a contact's account — renewals, open opportunities, open support cases, and recent user signups. It appears in the post-call event popup, and via the **View** toggle on the Accounts and Call Logs pages.
+
+Insights are served by `GET /api/insights?accountId=…` (also accepts `phone` or `company`), backed by a provider layer in `src/lib/insights/`:
+
+- **Mock provider (default):** with no configuration, Salesforce-shaped mock records from `src/data/sfdc-mock.js` feed the same derivation logic — nothing to set up.
+- **Salesforce MCP provider:** set `SFDC_MCP_URL` in `.env` to connect to a Salesforce MCP server with the official [`@modelcontextprotocol/sdk`](https://www.npmjs.com/package/@modelcontextprotocol/sdk). It was built against Salesforce's hosted [SObject Reads server](https://developer.salesforce.com/docs/platform/hosted-mcp-servers/guide/sobject-reads.html), which exposes a `soqlQuery` tool; the provider calls it to fetch the Account, its active Contract (renewal date), open Opportunities, open Cases, and recently created Contacts. Optional env vars: `SFDC_MCP_TOKEN` (bearer token sent to the server) and `SFDC_MCP_QUERY_TOOL` (override the tool name if your server exposes a different one). Notes: Salesforce's hosted server uses per-user OAuth — a full OAuth handshake is out of scope for this demo, so pass a pre-minted access token; and "users signed up" is approximated by Contacts created in the last 7 days.
+
+---
+
 ## 🔄 Branch Features Overview
 
 | Branch           | Features                                                                 |

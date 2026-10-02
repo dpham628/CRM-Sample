@@ -1,6 +1,7 @@
 "use client"
 
 import SearchBar from "@/components/Searchbar";
+import InsightsCard from "@/components/InsightsCard";
 import React, { useState, useEffect } from "react";
 import { accounts } from "@/data/accounts";
 
@@ -24,6 +25,11 @@ export const makeCall = (phoneNumber, callerId) => {
 };
 
 const Accounts = () => {
+  const [insightsAccountId, setInsightsAccountId] = useState(null);
+
+  const toggleInsights = (accountId) => {
+    setInsightsAccountId((current) => (current === accountId ? null : accountId));
+  };
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-8">
@@ -39,6 +45,7 @@ const Accounts = () => {
               <th className="px-4 py-3 border-b">Phone Number</th>
               <th className="px-4 py-3 border-b">Description</th>
               <th className="px-4 py-3 border-b">Status</th>
+              <th className="px-4 py-3 border-b">Insights</th>
             </tr>
           </thead>
           <tbody className="text-gray-700">
@@ -59,12 +66,24 @@ const Accounts = () => {
           {account.status}
         </span>
       </td>
+      <td className="px-4 py-3 border-b">
+        <button
+          onClick={() => toggleInsights(account.id)}
+          className="text-amber-700 hover:text-amber-900 hover:underline whitespace-nowrap"
+        >
+          {insightsAccountId === account.id ? 'Hide' : 'View'}
+        </button>
+      </td>
     </tr>
   ))}
 </tbody>
 
         </table>
       </div>
+
+      {insightsAccountId && (
+        <InsightsCard accountId={insightsAccountId} className="mt-4 max-w-md" />
+      )}
     </div>
   );
 }
