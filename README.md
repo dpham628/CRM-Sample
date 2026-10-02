@@ -33,9 +33,10 @@ This application is designed as a reference project for developers building CRM 
    ```
    *Note: To clone a specific branch, run the command `git clone --branch <branch-name> --single-branch <repo-url>` in your terminal. Otherwise, clone the entire repo and switch to the respective branch based on your product pereference*
 
-2. Install dependencies:
+2. Use Node.js 24 LTS (pinned in `.nvmrc` / `.node-version`; `engines.node` is `>=24.21.0`), then install dependencies:
    ```bash
-   npm install
+   nvm install   # or: nvm use (reads .nvmrc)
+   npm ci
    ```
 3. Copy `.env.sample` to a `.env` file (see below for OAuth instructions). Set `NEXTAUTH_URL` to the app's base URL (e.g. `http://localhost:3000` locally, or your ngrok URL) and `NEXTAUTH_SECRET` to a random string (e.g. `openssl rand -base64 32`). On `main`, the Zoom credentials can stay as placeholders; pages don't require sign-in.
 4. Start the development server:
