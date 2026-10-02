@@ -24,7 +24,7 @@ const EventModal = ({ log, index, onClose }) => {
 
   return (
     <div
-      className="absolute left-5 w-80 bg-white shadow-lg rounded-lg border p-4 z-50"
+      className="event-popup absolute left-5 w-80 bg-white shadow-lg rounded-lg border p-4 z-50"
       style={{ top: `${10 + index * 120}px` }}
     >
       <div className="flex justify-between items-center mb-2">

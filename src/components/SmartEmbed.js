@@ -2,13 +2,14 @@
 
 export default function SmartEmbed() {
   return (
-    <div className="w-full max-w-md mx-auto p-4">
-      <div className="rounded-xl shadow-md bg-white border border-gray-200 overflow-hidden">
+    <div className="smart-embed w-full max-w-md mx-auto p-4">
+      <div className="smart-embed-frame rounded-xl shadow-md bg-white border border-gray-200 overflow-hidden">
         <iframe
           src="https://applications.zoom.us/integration/phone/embeddablephone/home"
           allow="clipboard-read; clipboard-write https://applications.zoom.us"
           id="zoom-embeddable-phone-iframe"
-          className="w-full h-[80vh] border-none"
+          title="Zoom Phone softphone"
+          className="w-full h-[80dvh] border-none"
         ></iframe>
       </div>
     </div>

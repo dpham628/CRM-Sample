@@ -10,7 +10,7 @@ const Earnings = () => {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow p-6 min-w-0 w-full max-w-[800px] mx-auto">
+    <div className="bg-white rounded-2xl shadow p-4 md:p-6 min-w-0 w-full max-w-[800px] mx-auto">
       <h2 className="text-xl font-semibold text-gray-00 mb-4">Earnings Overview</h2>
       <div className="flex justify-center">
         <div className="space-y-4 w-full max-w-[600px]">

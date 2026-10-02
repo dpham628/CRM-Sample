@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import useDialog from '@/lib/use-dialog';
 import { format } from 'date-fns';
 import { accounts, findAccountById } from '@/data/accounts';
 import { DUE_OPTIONS, resolveDueDate } from '@/lib/due-dates';
@@ -11,6 +12,8 @@ const SUGGESTED_STEPS = [
 ];
 
 const PostCallTaskModal = ({ call, onClose, onSave }) => {
+  const dialogRef = useRef(null);
+  useDialog(dialogRef, true, onClose);
   const [accountId, setAccountId] = useState(call.accountId || '');
   const [nextStep, setNextStep] = useState('');
   const [dueOption, setDueOption] = useState('24h');
@@ -55,13 +58,16 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+    <div className="modal-overlay fixed inset-0 bg-black/30 flex items-center justify-center z-50">
       <div
         role="dialog"
+        ref={dialogRef}
+        tabIndex={-1}
+        aria-modal="true"
         aria-labelledby="post-call-task-title"
-        className="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 flex flex-col"
+        className="dialog-panel bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 flex flex-col"
       >
-        <div className="flex justify-between items-center px-6 py-4 border-b">
+        <div className="dialog-header flex justify-between items-center px-6 py-4 border-b">
           <div>
             <h3 id="post-call-task-title" className="text-lg font-semibold text-gray-800">
               Create follow-up task
@@ -75,7 +81,7 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
           </button>
         </div>
 
-        <div className="px-6 py-4 space-y-4 text-sm">
+        <div className="dialog-content px-6 py-4 space-y-4 text-sm">
           <label className="block">
             <span className="font-medium text-gray-700">Contact</span>
             <select
@@ -106,7 +112,7 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
               className="mt-1 w-full border border-gray-300 rounded px-2 py-2"
             />
           </label>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {SUGGESTED_STEPS.map((step) => (
               <button
                 key={step.label}
@@ -121,7 +127,7 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
 
           <div>
             <span className="font-medium text-gray-700">Due</span>
-            <div className="mt-1 flex items-center gap-2">
+            <div className="mt-1 flex flex-wrap items-center gap-2">
               <select
                 aria-label="Due"
                 value={dueOption}
@@ -148,7 +154,7 @@ const PostCallTaskModal = ({ call, onClose, onSave }) => {
           {error && <p className="text-red-600">{error}</p>}
         </div>
 
-        <div className="border-t px-6 py-4 flex justify-end gap-2">
+        <div className="dialog-footer border-t px-6 py-4 flex justify-end gap-2">
           <button onClick={onClose} className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition">
             Cancel
           </button>

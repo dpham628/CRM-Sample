@@ -45,6 +45,17 @@ This application is designed as a reference project for developers building CRM 
 
 ---
 
+## Mobile web experience
+
+- Below 768px, use the bottom tabs for Dashboard, Accounts, Call Logs, Tasks, and More (Instructions). Tables become labeled cards.
+- Below 1024px, tap **Phone** to open the full-screen Zoom panel, or tap an account's phone number. **Close phone** hides the panel without replacing its iframe; page navigation also leaves it mounted.
+- At 1024px and above, the sidebar, content, and Zoom panel remain side by side. Tablet tables scroll within their containers.
+- To install, serve the app over HTTPS (localhost is only a development exception). In iOS Safari, choose **Share → Add to Home Screen**; in Android Chrome, choose **Install app / Add to Home screen** from the menu. The app has a manifest, app icons, and standalone launch metadata; no service worker or offline support is included.
+
+For a quick demo, open Call Logs on a phone-sized viewport, tap **Create task**, save a next step, and find it under Tasks. No Zoom login is needed for the mock CRM pages; calls and API-backed details require Zoom configuration.
+
+---
+
 ## 🔑 Zoom OAuth Setup
 
 1. Go to the [Zoom App Marketplace](https://marketplace.zoom.us/)

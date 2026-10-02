@@ -1,9 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import useDialog from "@/lib/use-dialog";
 
 const CallDetailsModal = ({ callId, onClose }) => {
   const [callDetails, setCallDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const dialogRef = useRef(null);
+  useDialog(dialogRef, !!callId, onClose);
 
   useEffect(() => {
     const fetchCallDetails = async () => {
@@ -47,12 +50,12 @@ const CallDetailsModal = ({ callId, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-transparent flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-md mx-4 max-h-[80vh] flex flex-col">
+    <div className="modal-overlay fixed inset-0 bg-transparent flex items-center justify-center z-50">
+      <div ref={dialogRef} tabIndex={-1} role="dialog" aria-modal="true" aria-labelledby="call-details-title" className="dialog-panel bg-white rounded-lg shadow-xl w-full max-w-md mx-4 flex flex-col">
         {/* Header */}
-        <div className="flex justify-between items-center px-6 py-4 border-b">
-          <h3 className="text-lg font-semibold text-gray-800">Call Details</h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+        <div className="dialog-header flex justify-between items-center px-6 py-4 border-b">
+          <h3 id="call-details-title" className="text-lg font-semibold text-gray-800">Call Details</h3>
+          <button onClick={onClose} aria-label="Close call details" className="text-gray-500 hover:text-gray-700">
             <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
@@ -60,7 +63,7 @@ const CallDetailsModal = ({ callId, onClose }) => {
         </div>
 
         {/* Body */}
-        <div className="px-6 py-4 overflow-y-auto flex-grow">
+        <div className="dialog-content call-details-content px-6 py-4 overflow-y-auto flex-grow">
           {loading ? (
             <div className="flex justify-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500" />
@@ -180,7 +183,7 @@ const CallDetailsModal = ({ callId, onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="border-t px-6 py-4 flex justify-end">
+        <div className="dialog-footer border-t px-6 py-4 flex justify-end">
           <button
             onClick={onClose}
             className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300 transition"

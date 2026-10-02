@@ -49,7 +49,7 @@ const EventLog = () => {
   };
 
   return (
-    <div>
+    <div className="event-stack">
       {logs.map((log, index) => (
         <EventModal key={log.id} log={log} index={index} onClose={closeModal} />
       ))}
