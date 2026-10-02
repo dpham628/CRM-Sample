@@ -24,14 +24,14 @@ const EventModal = ({ log, index, onClose }) => {
 
   return (
     <div
-      className="absolute left-5 w-80 bg-white shadow-lg rounded-lg border p-4 z-50"
+      className="fixed md:absolute left-2 right-2 md:left-5 md:right-auto md:w-80 bg-white shadow-lg rounded-lg border p-4 z-50"
       style={{ top: `${10 + index * 120}px` }}
     >
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-md font-semibold text-gray-800">Zoom Phone Event</h3>
         <button
           onClick={() => onClose(log.id)}
-          className="text-sm text-red-600 hover:underline"
+          className="min-h-11 md:min-h-0 px-2 md:px-0 text-sm text-red-600 hover:underline"
         >
           Close
         </button>
@@ -46,7 +46,7 @@ const EventModal = ({ log, index, onClose }) => {
       {eventType === "zp-call-log-completed-event" && (
         <button
           onClick={createTask}
-          className="mt-3 w-full px-3 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+          className="mt-3 w-full min-h-11 md:min-h-0 px-3 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
         >
           Create follow-up task
         </button>

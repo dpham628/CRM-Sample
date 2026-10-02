@@ -40,7 +40,7 @@ const SearchBar = () => {
       <div className="flex space-x-2">
         <input
           type="text"
-          className="w-full px-4 py-2 border rounded-xl shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+          className="w-full min-w-0 min-h-11 md:min-h-0 px-4 py-2 border rounded-xl shadow-sm focus:outline-none focus:ring focus:border-blue-300"
           placeholder="Search contacts..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -48,7 +48,7 @@ const SearchBar = () => {
         />
         <button
           onClick={handleSearch}
-          className="px-4 py-2 rounded-xl bg-gray-200 text-gray-700 border border-gray-300 hover:bg-gray-300"
+          className="min-h-11 md:min-h-0 px-4 py-2 rounded-xl bg-gray-200 text-gray-700 border border-gray-300 hover:bg-gray-300"
         >
           Search
         </button>
