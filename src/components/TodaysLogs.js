@@ -40,7 +40,7 @@ const Calls = () => {
   return (
     <div className="overflow-x-auto bg-white shadow-md rounded-lg p-4 min-w-0">
       <h2 className="text-lg font-semibold text-gray-700 mb-4">Daily Call Logs</h2>
-      <table className="text-sm text-left text-gray-600">
+      <table className="mobile-cards text-sm text-left text-gray-600">
         <thead className="bg-gray-100 text-xs uppercase text-gray-500">
           <tr>
             <th className="px-4 py-2">Agent</th>
@@ -54,12 +54,12 @@ const Calls = () => {
         <tbody>
           {todaysLogs.map((log) => (
             <tr key={log.id} className="border-b hover:bg-gray-50">
-              <td className="px-4 py-2">{log.agent_name}</td>
-              <td className="px-4 py-2">{log.queue_name}</td>
-              <td className="px-4 py-2">{now ? new Date(log.start_time).toLocaleString() : ''}</td>
-              <td className="px-4 py-2">{now ? new Date(log.end_time).toLocaleString() : ''}</td>
-              <td className="px-4 py-2">{Math.floor(log.duration / 60)} min</td>
-              <td className="px-4 py-2"> 
+              <td data-label="Agent" className="px-4 py-2">{log.agent_name}</td>
+              <td data-label="Queue" className="px-4 py-2">{log.queue_name}</td>
+              <td data-label="Start time" className="px-4 py-2">{now ? new Date(log.start_time).toLocaleString() : ''}</td>
+              <td data-label="End time" className="px-4 py-2">{now ? new Date(log.end_time).toLocaleString() : ''}</td>
+              <td data-label="Duration" className="px-4 py-2">{Math.floor(log.duration / 60)} min</td>
+              <td data-label="Recording" className="px-4 py-2">
                 {log.recording_url ? (
                   <a
                     href={log.recording_url}

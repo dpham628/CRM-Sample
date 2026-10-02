@@ -40,7 +40,8 @@ const SearchBar = () => {
       <div className="flex space-x-2">
         <input
           type="text"
-          className="w-full px-4 py-2 border rounded-xl shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+          className="w-full min-w-0 px-4 py-2 border rounded-xl shadow-sm focus:outline-none focus:ring focus:border-blue-300"
+          aria-label="Search contacts"
           placeholder="Search contacts..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}

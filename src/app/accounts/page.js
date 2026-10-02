@@ -18,6 +18,7 @@ export const makeCall = (phoneNumber, callerId) => {
     };
     // Send the message to the iframe
     iframe.contentWindow.postMessage(message, 'https://applications.zoom.us');
+    window.dispatchEvent(new Event('crm-open-phone'));
   } else {
     console.error('Iframe or contentWindow not ready. Cannot make call.');
   }
@@ -26,11 +27,11 @@ export const makeCall = (phoneNumber, callerId) => {
 const Accounts = () => {
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8">
+    <div className="max-w-4xl mx-auto px-4 md:px-6 py-8">
       <SearchBar/>
       <h2 className="text-lg font-semibold mb-4">External Accounts</h2>
       <div className="overflow-x-auto rounded-lg shadow">
-        <table className="min-w-full bg-white border border-gray-200 text-sm text-left rounded-lg overflow-hidden">
+        <table className="mobile-cards min-w-full bg-white border border-gray-200 text-sm text-left rounded-lg overflow-hidden">
           <thead className="bg-gray-100 text-gray-600 uppercase text-xs tracking-wider">
             <tr>
               <th className="px-4 py-3 border-b">ID</th>
@@ -44,17 +45,18 @@ const Accounts = () => {
           <tbody className="text-gray-700">
   {accounts.map((account) => (
     <tr key={account.id} className="hover:bg-gray-50 transition-colors">
-      <td className="px-4 py-3 border-b">{account.id}</td>
-      <td className="px-4 py-3 border-b font-medium">{account.name}</td>
-      <td className="px-4 py-3 border-b text-gray-500">{account.email}</td>
-      <td
-        className="px-4 py-3 border-b text-gray-500 cursor-pointer hover:text-blue-500 transition"
-        onClick={() => makeCall(account.phoneNumber)}
+      <td data-label="ID" className="px-4 py-3 border-b">{account.id}</td>
+      <td data-label="Name" className="px-4 py-3 border-b font-medium">{account.name}</td>
+      <td data-label="Email" className="px-4 py-3 border-b text-gray-500">{account.email}</td>
+      <td data-label="Phone"
+        className="px-4 py-3 border-b text-gray-500"
       >
-        {account.phoneNumber}
+        <button onClick={() => makeCall(account.phoneNumber)} className="hover:text-blue-500 transition" aria-label={`Call ${account.name}`}>
+          {account.phoneNumber}
+        </button>
       </td>
-      <td className="px-4 py-3 border-b text-gray-500">{account.description}</td>
-      <td className="px-4 py-3 border-b">
+      <td data-label="Description" className="px-4 py-3 border-b text-gray-500">{account.description}</td>
+      <td data-label="Status" className="px-4 py-3 border-b">
         <span className={`inline-block px-2 py-1 text-xs font-semibold rounded-full ${account.status === 'Active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
           {account.status}
         </span>

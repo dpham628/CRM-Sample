@@ -15,7 +15,7 @@ const Tasks = () => {
     .sort((a, b) => new Date(a.dueAt) - new Date(b.dueAt));
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8">
+    <div className="max-w-4xl mx-auto px-4 md:px-6 py-8">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold">Follow-up Tasks</h2>
         <button
@@ -41,7 +41,7 @@ const Tasks = () => {
       </div>
 
       <div className="overflow-x-auto rounded-lg shadow">
-        <table className="min-w-full bg-white border border-gray-200 text-sm text-left rounded-lg overflow-hidden">
+        <table className="mobile-cards min-w-full bg-white border border-gray-200 text-sm text-left rounded-lg overflow-hidden">
           <thead className="bg-gray-100 text-gray-600 uppercase text-xs tracking-wider">
             <tr>
               <th className="px-4 py-3 border-b">Done</th>
@@ -66,7 +66,7 @@ const Tasks = () => {
               const overdue = !task.completedAt && isPast(due);
               return (
                 <tr key={task.id} className="hover:bg-gray-50 transition-colors align-top">
-                  <td className="px-4 py-3 border-b">
+                  <td data-label="Done" className="px-4 py-3 border-b">
                     <input
                       type="checkbox"
                       aria-label={`Mark "${task.nextStep}" done`}
@@ -74,15 +74,15 @@ const Tasks = () => {
                       onChange={() => toggleTask(task.id)}
                     />
                   </td>
-                  <td className="px-4 py-3 border-b">
+                  <td data-label="Contact" className="px-4 py-3 border-b">
                     <div>{task.contactName}</div>
                     <div className="text-xs text-gray-500">{task.contactEmail}</div>
                   </td>
-                  <td className="px-4 py-3 border-b">{task.account}</td>
-                  <td className={`px-4 py-3 border-b ${task.completedAt ? "line-through text-gray-400" : "font-medium"}`}>
+                  <td data-label="Account" className="px-4 py-3 border-b">{task.account}</td>
+                  <td data-label="Next step" className={`px-4 py-3 border-b ${task.completedAt ? "line-through text-gray-400" : "font-medium"}`}>
                     {task.nextStep}
                   </td>
-                  <td className={`px-4 py-3 border-b ${overdue ? "text-red-600" : ""}`}>
+                  <td data-label="Due" className={`px-4 py-3 border-b ${overdue ? "text-red-600" : ""}`}>
                     <div>{format(due, "EEE, MMM d, h:mm a")}</div>
                     <div className="text-xs">
                       {task.completedAt
@@ -92,8 +92,8 @@ const Tasks = () => {
                         : `in ${formatDistanceToNow(due)}`}
                     </div>
                   </td>
-                  <td className="px-4 py-3 border-b">{task.callId || "—"}</td>
-                  <td className="px-4 py-3 border-b">
+                  <td data-label="Call" className="px-4 py-3 border-b">{task.callId || "—"}</td>
+                  <td data-label="Actions" className="px-4 py-3 border-b">
                     <button onClick={() => removeTask(task.id)} className="text-red-600 hover:underline">
                       Delete
                     </button>
